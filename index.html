@@ -29,13 +29,14 @@
 
         .btn-accent {
             background: var(--color-principal);
-            color: #000;
+            color: white;
             border: none;
         }
 
         .btn-accent:hover {
-            background: rgb(71, 138, 255);
-            color: #000;
+            background-color: var(--color-principal);
+            color: #fdfdfd;
+            font-weight: bold;
         }
 
         .btn-accent2 {
@@ -47,6 +48,7 @@
         .btn-accent2:hover {
             background: #ffffff;
             color: #000000;
+            font-weight: bold;
         }
 
         .section-title {
@@ -72,6 +74,17 @@
             padding: 20px;
             margin-top: 40px;
             border-top: 1px solid #222;
+        }
+
+        #flyersCarousel .carousel-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Muestra la imagen completa */
+            background-color: #000;
+            /* Opcional: relleno negro para que quede prolijo */
+            padding: 5px;
+            border-radius: 15px;
         }
     </style>
 </head>
@@ -262,6 +275,29 @@
             </div>
         </div>
     </section>
+
+    <!-- CARRUSEL MINI - GENERADO POR JS -->
+    <section id="flyers" class="container py-5">
+        <h2 class="section-title">Mis Flyers</h2>
+        <p class="fs-6 mb-4">Algunos diseños que realicé para organizaciones, iglesias y empresas.</p>
+
+        <div id="flyersCarousel" class="carousel slide" data-bs-ride="carousel" style="max-width: 300px; margin:auto;">
+
+            <!-- INDICADORES (se generan por JS más abajo) -->
+            <div class="carousel-indicators" id="flyersIndicators"></div>
+
+            <div class="carousel-inner" id="flyersCarouselInner"></div>
+
+            <!-- Controles -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#flyersCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#flyersCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
 
     <!-- CONTACTO -->
     <section id="contacto" class="container py-5">
@@ -551,6 +587,39 @@
             if (!win) window.location.href = mailtoUrl;
         }
     </script>
+
+    <script>
+        fetch("img/Flyers/flyers.json")
+            .then(res => res.json())
+            .then(flyers => {
+
+                const contenedor = document.getElementById("flyersCarouselInner");
+                const indicadores = document.getElementById("flyersIndicators");
+
+                flyers.forEach((nombre, index) => {
+
+                    // ITEM del carrusel
+                    const item = document.createElement("div");
+                    item.className = "carousel-item" + (index === 0 ? " active" : "");
+
+                    item.innerHTML = `
+                <img src="img/Flyers/${nombre}" class="d-block w-100">
+            `;
+
+                    contenedor.appendChild(item);
+
+                    // INDICADOR
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.setAttribute("data-bs-target", "#flyersCarousel");
+                    button.setAttribute("data-bs-slide-to", index);
+                    button.className = (index === 0 ? "active" : "");
+                    indicadores.appendChild(button);
+                });
+            })
+            .catch(err => console.error("Error cargando flyers:", err));
+    </script>
+
 </body>
 
 </html>
